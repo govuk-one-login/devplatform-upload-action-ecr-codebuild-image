@@ -1,17 +1,15 @@
 # Upload Action
 
-This is an action that allows you to upload a built SAM application to S3 and ECR using GitHub Actions.
+This is an action that allows you to upload an image to ECR using GitHub Actions.
 
-The action packages, signs, and uploads the application to the specified ECR and S3 bucket.
+The action packages, signs, and uploads the image to the specified ECR.
 
 ## Action Inputs
 
 | Input                      | Required | Description                                                                            | Example                                                                              |
-|----------------------------|----------|----------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
-| artifact-bucket-name       | true     | The secret with the name of the artifact S3 bucket                                     | artifact-bucket-1234                                                                 |
+|----------------------------|----------|----------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|                                                             |
 | container-sign-kms-key-arn | false     | The secret with the name of the Signing Profile resource in AWS                        | signing-profile-1234                                                                 |
 | working-directory          | false    | The working directory containing the SAM app and the template file                     | ./sam-ecr-app                                                                        |
-| template-file              | false    | The name of the CF template for the application. This defaults to template.yaml        | custom-template.yaml                                                                 |
 | role-to-assume-arn         | true     | The secret with the GitHub Role ARN from the pipeline stack                            | arn:aws:iam::0123456789999:role/myawesomeapppipeline-GitHubActionsRole-16HIKMTBBDL8Y |
 | ecr-repo-name              | true     | The secret with the name of the ECR repo created by the app-container-repository stack | app-container-repository-tobytraining-containerrepository-i6gdfkdnwrrm               |
 | dockerfile                 | false     | The Dockerfile to use for the build | Dockerfile
@@ -25,13 +23,11 @@ The action packages, signs, and uploads the application to the specified ECR and
 Pull in the action in your workflow as below, making sure to specify the release version you require.
 
 ```yaml
-- name: Deploy SAM app to ECR
-  uses: govuk-one-login/devplatform-upload-action-ecr@<version_number>
+- name: Push Image to ECR
+  uses: govuk-one-login/devplatform-upload-action-ecr-codebuild-image@<version_number>
   with:
-    artifact-bucket-name: ${{ secrets.ARTIFACT_SOURCE_BUCKET_NAME }}
     container-sign-kms-key-arn: ${{ secrets.CONTAINER_SIGN_KMS_KEY }}
     working-directory: ./sam-ecr-app
-    template-file: custom-template.yaml
     role-to-assume-arn: ${{ secrets.GH_ACTIONS_ROLE_ARN }}
     ecr-repo-name: ${{ secrets.ECR_REPOSITORY }}
 ```

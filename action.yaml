@@ -8,17 +8,10 @@ inputs:
     description: "The secret with the ARN of the key to sign container images e.g. secrets.CONTAINER_SIGN_KMS_KEY"
     required: false
     default: "none"
-  template-file:
-    description: "The name of the CF template for the application. This defaults to template.yaml"
-    required: false
-    default: template.yaml
   working-directory:
     description: "The working directory containing the app"
     required: false
     default: .
-  artifact-bucket-name:
-    description: "The secret with the name of the artifact S3 bucket (required) eg secrets.ARTIFACT_SOURCE_BUCKET_NAME"
-    required: true
   ecr-repo-name:
     description: "The secret with the name of the ECR Repo (required) eg secrets.ECR_REPOSITORY"
     required: true
@@ -69,7 +62,7 @@ runs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
       with:
-          mask-password: 'true'
+          mask-password: 'true' #pragma: allowlist secret
 
     - name: Login to private Docker Registry
       if: ${{ inputs.private-docker-registry != '' }}
@@ -90,9 +83,7 @@ runs:
         CONTAINER_SIGN_KMS_KEY_ARN: ${{ inputs.container-sign-kms-key-arn }}
         GITHUB_SHA: ${{ github.sha }}
         WORKING_DIRECTORY: ${{ inputs.working-directory }}
-        TEMPLATE_FILE: ${{ inputs.template-file }}
         ECR_REPO_NAME: ${{ inputs.ecr-repo-name }}
-        ARTIFACT_BUCKET_NAME: ${{ inputs.artifact-bucket-name }}
         DOCKERFILE: ${{ inputs.dockerfile }}
         DOCKER_BUILD_PATH: ${{ inputs.docker-build-path }}
 
