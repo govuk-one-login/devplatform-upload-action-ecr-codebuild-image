@@ -9,7 +9,7 @@ fi
 echo "Building image"
 
 docker build -t "$ECR_REGISTRY/$ECR_REPO_NAME:$GITHUB_SHA" -t "$ECR_REGISTRY/$ECR_REPO_NAME:latest" -f "$DOCKER_BUILD_PATH"/"$DOCKERFILE" "$DOCKER_BUILD_PATH"
-docker push "$ECR_REGISTRY/$ECR_REPO_NAME:$GITHUB_SHA"
+docker push "$ECR_REGISTRY/$ECR_REPO_NAME:$GITHUB_SHA" "$ECR_REGISTRY/$ECR_REPO_NAME:latest"
 
 if [ ${CONTAINER_SIGN_KMS_KEY_ARN} != "none" ]; then
     cosign sign --key "awskms:///${CONTAINER_SIGN_KMS_KEY_ARN}" "$ECR_REGISTRY/$ECR_REPO_NAME:$GITHUB_SHA"
