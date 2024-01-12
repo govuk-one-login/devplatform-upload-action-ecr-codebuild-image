@@ -6,6 +6,7 @@ if [ -z $DOCKER_BUILD_PATH ]; then
     DOCKER_BUILD_PATH=$WORKING_DIRECTORY
 fi
 echo "Setting up env"
+apt-get install docker-buildx-plugin -y
 chmod +x ~/.docker/cli-plugins/docker-buildx
 docker buildx create \
   --name zstd-builder \
