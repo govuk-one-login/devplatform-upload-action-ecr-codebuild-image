@@ -17,6 +17,7 @@ docker buildx use zstd-builder
 #  --output type=image,name="$ECR_REGISTRY/$ECR_REPO_NAME:$GITHUB_SHA",oci-mediatypes=true,compression=zstd,compression-level=3,force-compression=true,push=true "$DOCKER_BUILD_PATH"
 
 docker buildx build -t "$ECR_REGISTRY/$ECR_REPO_NAME:latest" -t "$ECR_REGISTRY/$ECR_REPO_NAME:$GITHUB_SHA"\
+  --squash \
   --file "$DOCKER_BUILD_PATH"/"$DOCKERFILE" \
   --output type=registry,oci-mediatypes=true,compression=zstd,compression-level=3,force-compression=true "$DOCKER_BUILD_PATH"
 
